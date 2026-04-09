@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📐 Studio di Funzione — Corso Completo</title>
+<script>
+window.MathJax = {
+  tex: { 
+    inlineMath: [['\\(', '\\)']], 
+    displayMath: [['\\[', '\\]']], 
+    processEscapes: true 
+  },
+  options: { 
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea'] 
+  },
+  startup: {
+    pageReady: () => {
+      // Questo assicura che MathJax processi la pagina appena è pronto
+      return MathJax.startup.defaultPageReady().then(() => {
+        // Forza il rendering della scheda attiva all'avvio
+        const activePanel = document.querySelector('.tpanel.act');
+        if (activePanel) MathJax.typesetPromise([activePanel]);
+      });
+    }
+  }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;800;900&display=swap');
+:root{--blk:#1a1a2e;--yel:#FFD700;--red:#E63946;--blu:#2196F3;--grn:#4CAF50;--pur:#9C27B0;--org:#FF9800;--tel:#009688;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',Arial,sans-serif;background:#FFF9F0;
+  background-image:radial-gradient(circle at 20px 20px,#ddd 1px,transparent 0),radial-gradient(circle at 60px 60px,#ddd 1px,transparent 0);
+  background-size:80px 80px;min-height:100vh;}
+.hdr{background:var(--blk);border-bottom:4px solid var(--yel);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.hdr h1{font-family:'Bangers',cursive;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--yel);text-shadow:3px 3px 0 var(--red);letter-spacing:2px;}
+.hdr-badge{background:var(--red);color:#fff;font-family:'Bangers',cursive;font-size:1rem;padding:5px 14px;border-radius:20px;border:3px solid #fff;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.mascot{background:linear-gradient(135deg,#fff3cd,#fff9e6);border:3px solid var(--blk);border-radius:12px;margin:14px 20px 0;padding:12px 16px;display:flex;align-items:center;gap:14px;box-shadow:4px 4px 0 var(--blk);}
+.em{font-size:2.6rem;flex-shrink:0;}
+.bubble{background:#fff;border:3px solid var(--blk);border-radius:12px;padding:9px 14px;position:relative;font-size:.92rem;font-weight:700;color:var(--blk);flex:1;}
+.bubble::before{content:'';position:absolute;left:-16px;top:50%;transform:translateY(-50%);border:8px solid transparent;border-right-color:var(--blk);}
+.bubble::after{content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);border:7px solid transparent;border-right-color:#fff;}
+.tabs-wrap{padding:14px 20px 0;}
+.tabs-row{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px;}
+.tbtn{font-family:'Bangers',cursive;font-size:.95rem;letter-spacing:1px;padding:9px 16px;border:3px solid var(--blk);border-bottom:none;border-radius:10px 10px 0 0;cursor:pointer;white-space:nowrap;background:#ddd;color:#555;position:relative;top:3px;transition:all .2s;}
+.tbtn.act{background:#fff;color:var(--blk);top:0;z-index:5;}
+.tbtn:nth-child(1).act{border-top:4px solid var(--red);}
+.tbtn:nth-child(2).act{border-top:4px solid var(--blu);}
+.tbtn:nth-child(3).act{border-top:4px solid var(--grn);}
+.tbtn:nth-child(4).act{border-top:4px solid var(--pur);}
+.tbtn:nth-child(5).act{border-top:4px solid var(--org);}
+.tbtn:nth-child(6).act{border-top:4px solid var(--tel);}
+.tbtn:nth-child(7).act{border-top:4px solid #e91e63;}
+.tpanel{display:none;background:#fff;border:3px solid var(--blk);border-radius:0 12px 12px 12px;margin:0 20px 20px;padding:22px;box-shadow:4px 4px 0 var(--blk);animation:si .25s ease;}
+.tpanel.act{display:block;}
+@keyframes si{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.stitle{font-family:'Bangers',cursive;font-size:1.8rem;letter-spacing:2px;color:var(--blk);display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:3px dashed var(--blk);}
+.tag{background:var(--red);color:#fff;font-size:.82rem;padding:2px 10px;border-radius:20px;border:2px solid var(--blk);}
+.tbox{border:3px solid var(--blk);border-radius:12px;margin-bottom:16px;overflow:hidden;box-shadow:4px 4px 0 var(--blk);}
+.thdr{background:var(--blk);color:var(--yel);font-family:'Bangers',cursive;font-size:1.1rem;padding:9px 16px;letter-spacing:1px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+.thdr:hover{background:#2d2d4e;}
+.tbody{background:#fffef5;padding:15px 17px;display:none;border-top:2px solid var(--blk);}
+.tbody.op{display:block;}
+.rule{background:linear-gradient(135deg,#fff9c4,#fff3cd);border:3px solid var(--org);border-radius:10px;padding:11px 15px;margin:9px 0;box-shadow:3px 3px 0 var(--org);}
+.rule .rt{font-family:'Bangers',cursive;font-size:1rem;color:var(--org);margin-bottom:4px;letter-spacing:1px;}
+.ccase{background:#fff;border:3px solid var(--blk);border-radius:10px;padding:13px 15px;margin:9px 0;position:relative;}
+.ccase::before{content:attr(data-n);position:absolute;top:-11px;left:12px;background:var(--red);color:#fff;font-family:'Bangers',cursive;font-size:.78rem;padding:2px 10px;border-radius:12px;border:2px solid var(--blk);}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-top:14px;}
+.excard{background:#fff;border:3px solid var(--blk);border-radius:12px;overflow:hidden;box-shadow:4px 4px 0 var(--blk);transition:transform .15s;}
+.excard:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--blk);}
+.exhdr{background:var(--blk);color:#fff;padding:7px 12px;display:flex;justify-content:space-between;align-items:center;}
+.exnum{font-family:'Bangers',cursive;font-size:.92rem;color:var(--yel);letter-spacing:1px;}
+.lv{font-size:.7rem;color:#fff;padding:2px 7px;border-radius:8px;background:var(--grn);}
+.lv.m{background:var(--org);}.lv.h{background:var(--red);}
+.exbody{padding:12px;}
+.exf{font-size:.95rem;color:var(--blk);margin-bottom:7px;min-height:28px;}
+.exbtns{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;}
+.bg{background:var(--blu);color:#fff;border:2px solid var(--blk);border-radius:7px;padding:5px 11px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .15s;box-shadow:2px 2px 0 var(--blk);}
+.bg:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--blk);}
+.bt{background:var(--pur);color:#fff;border:2px solid var(--blk);border-radius:7px;padding:5px 11px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .15s;box-shadow:2px 2px 0 var(--blk);}
+.bt:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--blk);}
+.cg{display:none;background:#f0f4ff;border-top:2px dashed var(--blu);padding:10px 12px;font-size:.87rem;animation:si .2s ease;}
+.cg.op{display:block;}
+.ct{display:none;background:#f5f0ff;border-top:2px dashed var(--pur);padding:10px 12px;font-size:.87rem;animation:si .2s ease;}
+.ct.op{display:block;}
+.step{margin:6px 0;padding:6px 10px;border-left:4px solid var(--blu);background:#fff;border-radius:0 6px 6px 0;}
+.step strong{color:var(--blu);}
+.fdisp{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:3px solid var(--grn);border-radius:9px;padding:11px 17px;margin:9px 0;text-align:center;box-shadow:3px 3px 0 var(--grn);}
+.att{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:3px solid var(--org);border-radius:9px;padding:9px 13px;margin:9px 0;display:flex;gap:8px;align-items:flex-start;}
+.ok{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:3px solid var(--grn);border-radius:9px;padding:9px 13px;margin:9px 0;}
+.ctbl{width:100%;border-collapse:collapse;margin:9px 0;border:3px solid var(--blk);}
+.ctbl th{background:var(--blk);color:var(--yel);font-family:'Bangers',cursive;letter-spacing:1px;padding:7px 10px;text-align:left;}
+.ctbl td{padding:7px 10px;border:1px solid #ccc;}
+.ctbl tr:nth-child(even) td{background:#f9f9f9;}
+.wex{background:linear-gradient(135deg,#fff9f0,#fff3e0);border:4px solid var(--org);border-radius:14px;padding:18px;margin:14px 0;box-shadow:5px 5px 0 var(--org);}
+.wex-t{font-family:'Bangers',cursive;font-size:1.3rem;color:var(--org);border-bottom:2px dashed var(--org);padding-bottom:7px;margin-bottom:12px;letter-spacing:1px;}
+.wstep{background:#fff;border:2px solid var(--blk);border-radius:8px;padding:11px 14px;margin:9px 0;position:relative;}
+.wsn{position:absolute;top:-10px;left:11px;background:var(--org);color:#fff;font-family:'Bangers',cursive;font-size:.78rem;padding:2px 9px;border-radius:9px;border:2px solid var(--blk);}
+.hr{color:var(--red);font-weight:800;}.hb{color:var(--blu);font-weight:800;}.hg{color:var(--grn);font-weight:800;}.ho{color:var(--org);font-weight:800;}
+@media(max-width:600px){.tpanel{margin:0 6px 14px;padding:14px;}.tabs-wrap{padding:6px 6px 0;}.exgrid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <h1>📐 STUDIO DI FUNZIONE</h1>
+  <span class="hdr-badge">✨ CORSO COMPLETO</span>
+</header>
+<div class="mascot">
+  <div class="em">🤓</div>
+  <div class="bubble">Ciao! Sono il Prof. <strong>Calc-Bot 3000</strong> 🤖 — ogni sezione ha la <strong>teoria</strong>, lo <strong>svolgimento guidato</strong> e l'<strong>approfondimento</strong>. Non avere paura: ce la fai! 💪</div>
+</div>
+<div class="tabs-wrap">
+  <div class="tabs-row">
+    <button class="tbtn act" onclick="showTab('dom',this)">1️⃣ Dominio</button>
+    <button class="tbtn" onclick="showTab('sim',this)">2️⃣ Simmetria &amp; Zeri</button>
+    <button class="tbtn" onclick="showTab('seg',this)">3️⃣ Studio del Segno</button>
+    <button class="tbtn" onclick="showTab('lim',this)">4️⃣ Limiti &amp; Asintoti</button>
+    <button class="tbtn" onclick="showTab('d1',this)">5️⃣ Derivata Prima</button>
+    <button class="tbtn" onclick="showTab('d2',this)">6️⃣ Derivata Seconda</button>
+    <button class="tbtn" onclick="showTab('sc',this)">7️⃣ Studio Completo</button>
+  </div>
+</div>
+
+<div id="dom" class="tpanel act">
+<div class="stitle">🏠 Il Dominio della Funzione <span class="tag">6 CASI</span></div>
+<div class="mascot" style="margin:0 0 14px">
+  <div class="em">🎯</div>
+  <div class="bubble">Il dominio è l'insieme di tutti i valori di <strong>x</strong> per cui la funzione è <strong>calcolabile</strong>. Pensa alla funzione come a una <em>macchinetta</em>: il dominio sono i gettoni che lei accetta!</div>
+</div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 I 6 CASI DEL DOMINIO — teoria <span>▼</span></div>
+  <div class="tbody op">
+    <div class="rule"><div class="rt">⚡ REGOLA BASE</div>
+      Il dominio è \(\mathbb{R}\) (tutti i numeri reali) a meno che la funzione non contenga uno dei 6 casi critici.
+    </div>
+    <div class="ccase" data-n="CASO 1 — FRAZIONI"><br>
+      Denominatore \(\neq 0\):
+      <div class="fdisp">\[ \frac{f(x)}{g(x)} \implies g(x) \neq 0 \]</div>
+    </div>
+    <div class="ccase" data-n="CASO 2 — RADICI PARI"><br>
+      Argomento \(\geq 0\) (se indice <strong>dispari</strong>: nessuna condizione!):
+      <div class="fdisp">\[ \sqrt[2n]{f(x)} \implies f(x) \geq 0 \]</div>
+    </div>
+    <div class="ccase" data-n="CASO 3 — LOGARITMI"><br>
+      Argomento \(> 0\) (attenzione: senza uguale!):
+      <div class="fdisp">\[ \log_a f(x) \implies f(x) > 0 \]</div>
+    </div>
+    <div class="ccase" data-n="CASO 4 — ESPONENZIALE [f(x)]^g(x)"><br>
+      Solo se la base contiene x: base \(> 0\):
+      <div class="fdisp">\[ [f(x)]^{g(x)} \implies f(x) > 0 \]</div>
+      <em>Non si applica a \(2^x\), \(e^x\) (base numerica fissa).</em>
+    </div>
+    <div class="ccase" data-n="CASO 5 — TANGENTE"><br>
+      <div class="fdisp">\[ \tan(f(x)) \implies f(x) \neq \frac{\pi}{2} + k\pi,\quad k\in\mathbb{Z} \]</div>
+    </div>
+    <div class="ccase" data-n="CASO 6 — ARCSIN / ARCCOS"><br>
+      <div class="fdisp">\[ \arcsin(f(x)),\;\arccos(f(x)) \implies -1 \leq f(x) \leq 1 \]</div>
+    </div>
+    <table class="ctbl"><tr><th>Caso</th><th>Condizione da imporre</th></tr>
+      <tr><td>Frazione</td><td>Denominatore \(\neq 0\)</td></tr>
+      <tr><td>Radice pari</td><td>Argomento \(\geq 0\)</td></tr>
+      <tr><td>Logaritmo</td><td>Argomento \(> 0\)</td></tr>
+      <tr><td>\([f(x)]^{g(x)}\)</td><td>Base \(> 0\)</td></tr>
+      <tr><td>Tangente</td><td>Argomento \(\neq \frac{\pi}{2}+k\pi\)</td></tr>
+      <tr><td>Arcsin/Arccos</td><td>\(-1 \leq\) argomento \(\leq 1\)</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="stitle" style="font-size:1.3rem;margin-top:16px">💪 Esercizi — Dominio</div>
+<div class="exgrid">
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.1</span><span class="lv">⭐ facile</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\dfrac{x-1}{x+2}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g1')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t1')">📖 Approfondimento</button>
+    </div>
+    <div id="g1" class="cg">
+      <div class="step"><strong>Caso:</strong> Frazione → denominatore ≠ 0</div>
+      <div class="step"><strong>Impongo:</strong> \(x+2 \neq 0 \Rightarrow x \neq -2\)</div>
+      <div class="step"><strong>Dom</strong> \(= \mathbb{R}\setminus\{-2\} = (-\infty,-2)\cup(-2,+\infty)\)</div>
+    </div>
+    <div id="t1" class="ct">\(\mathbb{R}\setminus\{-2\}\) si legge "tutti i reali <em>tranne</em> −2". Parentesi tonde = estremo escluso; parentesi quadre = estremo incluso.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.2</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\dfrac{x^2-4}{2x^2+5x-3}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g2')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t2')">📖 Approfondimento</button>
+    </div>
+    <div id="g2" class="cg">
+      <div class="step"><strong>Impongo:</strong> \(2x^2+5x-3\neq 0\)</div>
+      <div class="step"><strong>\(\Delta=25+24=49\);</strong> \(x_{1,2}=\dfrac{-5\pm 7}{4}\) → \(x=\tfrac{1}{2}\) o \(x=-3\)</div>
+      <div class="step"><strong>Dom</strong> \(=\mathbb{R}\setminus\!\left\{-3,\tfrac{1}{2}\right\}\)</div>
+    </div>
+    <div id="t2" class="ct">Quando il denominatore è un polinomio di 2° grado: trova le radici con la formula del discriminante, poi escludile dal dominio.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.3</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\dfrac{2^{x+1}-\sqrt{2}}{2^x-8}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g3')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t3')">📖 Approfondimento</button>
+    </div>
+    <div id="g3" class="cg">
+      <div class="step"><strong>Impongo:</strong> \(2^x-8\neq 0\)</div>
+      <div class="step">\(2^x\neq 8=2^3\) → stessa base → \(x\neq 3\)</div>
+      <div class="step"><strong>Dom</strong> \(=\mathbb{R}\setminus\{3\}\)</div>
+    </div>
+    <div id="t3" class="ct">Equazione esponenziale con stessa base: \(a^{f(x)}=a^{g(x)}\Rightarrow f(x)=g(x)\).</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.4</span><span class="lv">⭐ facile</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\sqrt{x-2}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g4')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t4')">📖 Approfondimento</button>
+    </div>
+    <div id="g4" class="cg">
+      <div class="step"><strong>Radice quadrata</strong> → argomento \(\geq 0\)</div>
+      <div class="step">\(x-2\geq 0 \Rightarrow x\geq 2\)</div>
+      <div class="step"><strong>Dom</strong> \(=[2,+\infty)\)</div>
+    </div>
+    <div id="t4" class="ct">La parentesi quadra \([\) indica che il 2 è <strong>incluso</strong> (perché c'è ≥). Con > si userebbe \((\).</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.5</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\sqrt[4]{x^2-9}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g5')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t5')">📖 Approfondimento</button>
+    </div>
+    <div id="g5" class="cg">
+      <div class="step">Indice 4 (pari) → \(x^2-9\geq 0\)</div>
+      <div class="step">Equazione: \(x^2=9\Rightarrow x=\pm 3\)</div>
+      <div class="step">Parabola ∪ → valori <em>esterni</em>: \(x\leq-3\) o \(x\geq 3\)</div>
+      <div class="step"><strong>Dom</strong> \(=(-\infty,-3]\cup[3,+\infty)\)</div>
+    </div>
+    <div id="t5" class="ct">Disequazione 2° grado con \(a>0\): positiva <em>fuori</em> dalle radici. Con \(a&lt;0\): positiva <em>dentro</em>.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.6</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\sqrt{\dfrac{x+1}{x-3}}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g6')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t6')">📖 Approfondimento</button>
+    </div>
+    <div id="g6" class="cg">
+      <div class="step">Radice quadrata + frazione → impongo direttamente \(\dfrac{x+1}{x-3}\geq 0\)</div>
+      <div class="step">Numeratore \(\geq 0\): \(x\geq -1\) | Denominatore \(> 0\): \(x>3\)</div>
+      <div class="step">Grafico dei segni → positivo per \(x\leq -1\) o \(x>3\)</div>
+      <div class="step"><strong>Dom</strong> \(=(-\infty,-1]\cup(3,+\infty)\) <br>⚠️ −1 incluso (≥), 3 escluso (denominatore ≠ 0)</div>
+    </div>
+    <div id="t6" class="ct">La condizione ≥ 0 sulla radice <em>include già</em> la condizione denominatore ≠ 0: basta mettere il denominatore <strong>strettamente</strong> > 0.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.7</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\ln(x^3+27)\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g7')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t7')">📖 Approfondimento</button>
+    </div>
+    <div id="g7" class="cg">
+      <div class="step">Logaritmo → \(x^3+27>0 \Rightarrow x^3>-27\)</div>
+      <div class="step">Potenza dispari → radice cubica: \(x>\sqrt[3]{-27}=-3\)</div>
+      <div class="step"><strong>Dom</strong> \(=(-3,+\infty)\)</div>
+    </div>
+    <div id="t7" class="ct">Con potenze <strong>dispari</strong> si può fare la radice direttamente (il segno si conserva). Con potenze <strong>pari</strong> bisogna usare il metodo della parabola!</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.8</span><span class="lv">⭐ facile</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\ln(x^2+1)\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g8')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t8')">📖 Approfondimento</button>
+    </div>
+    <div id="g8" class="cg">
+      <div class="step">Logaritmo → \(x^2+1>0\)</div>
+      <div class="step">\(x^2\geq 0\) sempre → \(x^2+1\geq 1>0\) per ogni \(x\in\mathbb{R}\)!</div>
+      <div class="step"><strong>Dom</strong> \(=\mathbb{R}\)</div>
+    </div>
+    <div id="t8" class="ct">La condizione è <em>automaticamente</em> verificata: un quadrato più 1 è sempre ≥ 1 > 0. Il dominio è tutto ℝ!</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.9</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=(x-1)^{3x}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g9')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t9')">📖 Approfondimento</button>
+    </div>
+    <div id="g9" class="cg">
+      <div class="step">Esponenziale \([f(x)]^{g(x)}\) → base \(>0\)</div>
+      <div class="step">\(x-1>0 \Rightarrow x>1\)</div>
+      <div class="step"><strong>Dom</strong> \(=(1,+\infty)\)</div>
+    </div>
+    <div id="t9" class="ct">Si applica solo se la base contiene x. \(2^x, e^x\) (base numerica fissa) non richiedono questa condizione.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.10</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\tan\!\left(x+\dfrac{\pi}{4}\right)\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g10')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t10')">📖 Approfondimento</button>
+    </div>
+    <div id="g10" class="cg">
+      <div class="step">Tangente → argomento \(\neq\dfrac{\pi}{2}+k\pi\)</div>
+      <div class="step">\(x+\dfrac{\pi}{4}\neq\dfrac{\pi}{2}+k\pi \Rightarrow x\neq\dfrac{\pi}{4}+k\pi\)</div>
+      <div class="step"><strong>Dom</strong> \(=\{x\in\mathbb{R}:\, x\neq\tfrac{\pi}{4}+k\pi,\;k\in\mathbb{Z}\}\)</div>
+    </div>
+    <div id="t10" class="ct">Per la tangente non si usa la notazione ad intervalli. La \(k\in\mathbb{Z}\) significa che k è qualsiasi intero: 0, ±1, ±2, ...</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ES.11</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\arccos(x-4)\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g11')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t11')">📖 Approfondimento</button>
+    </div>
+    <div id="g11" class="cg">
+      <div class="step">Arcocoseno → \(-1\leq x-4\leq 1\)</div>
+      <div class="step">Addiziono 4: \(3\leq x\leq 5\)</div>
+      <div class="step"><strong>Dom</strong> \(=[3,5]\)</div>
+    </div>
+    <div id="t11" class="ct">Per arcsin e arccos il dominio è sempre un <em>intervallo finito</em>, perché la disuguaglianza doppia produce un intervallo chiuso.</div>
+  </div>
+</div>
+
+<div class="excard" style="grid-column:1/-1">
+  <div class="exhdr"><span class="exnum">📝 ES.12 — COMBINAZIONE</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Dominio di \(f(x)=\dfrac{x-1}{\ln(x+5)}\)</div>
+    <div class="exbtns">
+      <button class="bg" onclick="tv('g12')">🔍 Svolgimento guidato</button>
+      <button class="bt" onclick="tv('t12')">📖 Approfondimento</button>
+    </div>
+    <div id="g12" class="cg">
+      <div class="step"><strong>Condizione 1 — Logaritmo</strong> (argomento \(>0\)): \(x+5>0 \Rightarrow x>-5\)</div>
+      <div class="step"><strong>Condizione 2 — Frazione</strong> (denominatore \(\neq 0\)): \(\ln(x+5)\neq 0 \Rightarrow x+5\neq 1 \Rightarrow x\neq -4\)</div>
+      <div class="step"><strong>Intersezione</strong>: serve \(x>-5\) E \(x\neq -4\) contemporaneamente</div>
+      <div class="step"><strong>Dom</strong> \(=(-5,-4)\cup(-4,+\infty)\)</div>
+    </div>
+    <div id="t12" class="ct">Con più condizioni si usa il <strong>grafico delle intersezioni</strong> (come un sistema): le condizioni devono essere tutte verificate nello stesso momento. Ricorda: \(\ln(A)=0\) quando \(A=1\).</div>
+  </div>
+</div>
+
+</div><!-- exgrid -->
+</div><!-- tab dom -->
+
+<div id="sim" class="tpanel">
+<div class="stitle">🪞 Simmetria &amp; Zeri <span class="tag">STEP 2 &amp; 3</span></div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 TEORIA: Funzioni Pari e Dispari <span>▼</span></div>
+  <div class="tbody op">
+    <div class="rule"><div class="rt">🔬 METODO IN 2 PASSI</div>
+      <p><strong>Passo 1:</strong> Calcola \(f(-x)\) — sostituisci ogni x con \((-x)\), usando le parentesi!</p>
+      <p><strong>Passo 2:</strong> Confronta con \(f(x)\)</p>
+    </div>
+    <table class="ctbl">
+      <tr><th>Se...</th><th>Allora...</th><th>Simmetria</th></tr>
+      <tr><td>\(f(-x)=f(x)\)</td><td><strong>PARI</strong></td><td>rispetto all'asse y</td></tr>
+      <tr><td>\(f(-x)=-f(x)\)</td><td><strong>DISPARI</strong></td><td>rispetto all'origine</td></tr>
+      <tr><td>altro</td><td>né pari né dispari</td><td>nessuna</td></tr>
+    </table>
+    <div class="att"><div>⚠️</div><div><strong>Sapere a memoria:</strong> seno → dispari | coseno → pari | tangente → dispari | arctan → dispari | arcsin → dispari | arccos → <em>né pari né dispari!</em></div></div>
+  </div>
+</div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 TEORIA: Gli Zeri della Funzione <span>▼</span></div>
+  <div class="tbody">
+    <div class="rule"><div class="rt">🎯 COSA SONO</div>
+      Gli zeri sono i valori di x per cui \(f(x)=0\): i punti dove il grafico <strong>tocca l'asse x</strong>.
+    </div>
+    <div class="rule"><div class="rt">⚡ COME TROVARLI</div>
+      <p>1. Poni \(f(x)=0\) e risolvi l'equazione</p>
+      <p>2. <span class="hr">Verifica che le soluzioni appartengano al dominio!</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="stitle" style="font-size:1.3rem;margin-top:16px">💪 Esercizi</div>
+<div class="exgrid">
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SIM.1</span><span class="lv">⭐ facile</span></div>
+  <div class="exbody">
+    <div class="exf">Pari, dispari o nessuno? \(f(x)=\dfrac{x^2}{x^4-1}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gs1')">🔍 Guidato</button><button class="bt" onclick="tv('ts1')">📖 Approfondimento</button></div>
+    <div id="gs1" class="cg">
+      <div class="step">\(f(-x)=\dfrac{(-x)^2}{(-x)^4-1}=\dfrac{x^2}{x^4-1}=f(x)\)</div>
+      <div class="step"><strong>Risultato: PARI</strong> → grafico simmetrico rispetto all'asse y</div>
+    </div>
+    <div id="ts1" class="ct">Nelle frazioni con solo potenze pari di x, la funzione tende ad essere pari. Ma controlla sempre!</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SIM.2</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Pari, dispari o nessuno? \(f(x)=\dfrac{x}{x^2+1}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gs2')">🔍 Guidato</button><button class="bt" onclick="tv('ts2')">📖 Approfondimento</button></div>
+    <div id="gs2" class="cg">
+      <div class="step">\(f(-x)=\dfrac{-x}{x^2+1}=-\dfrac{x}{x^2+1}=-f(x)\)</div>
+      <div class="step"><strong>Risultato: DISPARI</strong></div>
+    </div>
+    <div id="ts2" class="ct">Quando f(−x) = −f(x), la funzione è dispari. Graficamente il grafico ha simmetria rispetto all'origine.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SIM.3</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Pari, dispari o nessuno? \(f(x)=e^{x^2+4}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gs3')">🔍 Guidato</button><button class="bt" onclick="tv('ts3')">📖 Approfondimento</button></div>
+    <div id="gs3" class="cg">
+      <div class="step">\(f(-x)=e^{(-x)^2+4}=e^{x^2+4}=f(x)\)</div>
+      <div class="step"><strong>Risultato: PARI</strong></div>
+    </div>
+    <div id="ts3" class="ct">\(e^x\) di per sé non è né pari né dispari, ma se all'esponente c'è una funzione pari (come \(x^2+4\)), allora il risultato è pari!</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SIM.4</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Pari, dispari o nessuno? \(f(x)=\cos(x-1)\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gs4')">🔍 Guidato</button><button class="bt" onclick="tv('ts4')">📖 Approfondimento</button></div>
+    <div id="gs4" class="cg">
+      <div class="step">\(f(-x)=\cos(-x-1)=\cos(-(x+1))\)</div>
+      <div class="step">Il coseno è pari → \(\cos(-(x+1))=\cos(x+1)\)</div>
+      <div class="step">Confronto: \(\cos(x+1)\neq\cos(x-1)\) e \(\neq -\cos(x-1)\)</div>
+      <div class="step"><strong>Risultato: né pari né dispari</strong></div>
+    </div>
+    <div id="ts4" class="ct">Attenzione! Il coseno è pari, ma questo permette di far sparire solo il meno davanti a <em>tutto</em> l'argomento. Qui il meno riguarda solo la x, non il −1.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ZERO.1</span><span class="lv">⭐ facile</span></div>
+  <div class="exbody">
+    <div class="exf">Zeri di \(f(x)=\dfrac{x^2-x-2}{x^2+3x}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gz1')">🔍 Guidato</button><button class="bt" onclick="tv('tz1')">📖 Approfondimento</button></div>
+    <div id="gz1" class="cg">
+      <div class="step">Numeratore = 0: \(x^2-x-2=0\) → \(x=\tfrac{1\pm 3}{2}\) → \(x=2\) o \(x=-1\)</div>
+      <div class="step">Dominio: \(x(x+3)\neq 0\) → \(x\neq 0,\, x\neq -3\)</div>
+      <div class="step">\(x=2\) ✓ e \(x=-1\) ✓ sono entrambi nel dominio</div>
+      <div class="step"><strong>Zeri: \(x=2\) e \(x=-1\)</strong></div>
+    </div>
+    <div id="tz1" class="ct">Una frazione è zero ⟺ il numeratore è zero (con denominatore ≠ 0). Verifica sempre che le soluzioni appartengano al dominio!</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 ZERO.2</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Zeri di \(f(x)=x\cdot\sqrt{x^2-9}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gz2')">🔍 Guidato</button><button class="bt" onclick="tv('tz2')">📖 Approfondimento</button></div>
+    <div id="gz2" class="cg">
+      <div class="step"><strong>Dominio:</strong> \(x^2-9\geq 0 \Rightarrow x\leq -3\) o \(x\geq 3\)</div>
+      <div class="step"><strong>Legge annullamento prodotto:</strong></div>
+      <div class="step">\(x=0\): ma 0 ∉ dominio → <span class="hr">SCARTATO!</span></div>
+      <div class="step">\(\sqrt{x^2-9}=0 \Rightarrow x^2=9 \Rightarrow x=\pm 3\) ✓ entrambi nel dominio</div>
+      <div class="step"><strong>Zeri: \(x=-3\) e \(x=3\)</strong></div>
+    </div>
+    <div id="tz2" class="ct">Fondamentale: \(x=0\) sembra una soluzione, ma non appartiene al dominio (il dominio richiede \(|x|\geq 3\)). Quindi non è uno zero della funzione!</div>
+  </div>
+</div>
+
+</div><!-- exgrid -->
+</div><!-- tab sim -->
+
+<div id="seg" class="tpanel">
+<div class="stitle">📊 Studio del Segno <span class="tag">STEP 4</span></div>
+<div class="mascot" style="margin:0 0 14px">
+  <div class="em">🎨</div>
+  <div class="bubble">Lo studio del segno dice <strong>dove la funzione è positiva</strong> (sopra l'asse x) e dove è <strong>negativa</strong> (sotto). Ti serve per disegnare il grafico!</div>
+</div>
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 TEORIA: Studio del Segno <span>▼</span></div>
+  <div class="tbody op">
+    <div class="rule"><div class="rt">⚡ PROCEDIMENTO</div>
+      <p>1. Prendi l'espressione di \(f(x)\) e mettila \(> 0\)</p>
+      <p>2. Risolvi la disequazione (spesso fratta)</p>
+      <p>3. I valori trovati dicono dove \(f>0\) = sopra l'asse x</p>
+    </div>
+    <div class="fdisp">\[f(x)>0 \implies \text{sopra l'asse x}\qquad f(x)&lt;0 \implies \text{sotto l'asse x}\]</div>
+    <div class="rule"><div class="rt">📈 IL GRAFICO DEI SEGNI</div>
+      <p>1. Metti i valori critici su una linea numerica</p>
+      <p>2. Una riga per ogni fattore</p>
+      <p>3. Segna + e − per ogni fattore</p>
+      <p>4. Moltiplica i segni colonna per colonna = risultato</p>
+    </div>
+  </div>
+</div>
+
+<div class="stitle" style="font-size:1.3rem;margin-top:16px">💪 Esercizi</div>
+<div class="exgrid">
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SEG.1</span><span class="lv">⭐ facile</span></div>
+  <div class="exbody">
+    <div class="exf">Studia il segno di \(f(x)=2x-1\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('ssg1')">🔍 Guidato</button><button class="bt" onclick="tv('sst1')">📖 Approfondimento</button></div>
+    <div id="ssg1" class="cg">
+      <div class="step">\(2x-1>0 \Rightarrow x>\tfrac{1}{2}\)</div>
+      <div class="step">f > 0 (sopra l'asse) per \(x>\tfrac{1}{2}\)</div>
+      <div class="step">f &lt; 0 (sotto l'asse) per \(x&lt;\tfrac{1}{2}\)</div>
+    </div>
+    <div id="sst1" class="ct">Per le funzioni lineari lo zero (x=1/2) coincide con il punto in cui la retta attraversa l'asse x.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SEG.2</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Studia il segno di \(f(x)=\dfrac{-3}{x+1}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('ssg2')">🔍 Guidato</button><button class="bt" onclick="tv('sst2')">📖 Approfondimento</button></div>
+    <div id="ssg2" class="cg">
+      <div class="step">Numeratore −3: sempre negativo (−)</div>
+      <div class="step">Denominatore \(x+1>0\) per \(x>-1\)</div>
+      <div class="step">Grafico segni: num(−)/den(−)= + per \(x&lt;-1\); num(−)/den(+)= − per \(x>-1\)</div>
+      <div class="step"><strong>f > 0 per \(x&lt;-1\)</strong></div>
+    </div>
+    <div id="sst2" class="ct">Il segno di una costante negativa (−3) è sempre −. Quella riga del grafico dei segni è tutta −.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SEG.3</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Studia il segno di \(f(x)=x^2-4x+3\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('ssg3')">🔍 Guidato</button><button class="bt" onclick="tv('sst3')">📖 Approfondimento</button></div>
+    <div id="ssg3" class="cg">
+      <div class="step">Radici: \(x=1\) e \(x=3\)</div>
+      <div class="step">Scompongo: \((x-1)(x-3)\geq 0\)</div>
+      <div class="step">Parabola ∪ → positiva <em>fuori</em> dalle radici</div>
+      <div class="step"><strong>f ≥ 0 per \(x\leq 1\) o \(x\geq 3\)</strong></div>
+    </div>
+    <div id="sst3" class="ct">Per un trinomio con \(a>0\): positivo all'esterno delle radici, negativo all'interno. Per \(a&lt;0\): il contrario!</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SEG.4</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Studia il segno di \(f(x)=\dfrac{(x-1)(x+4)}{2x-4}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('ssg4')">🔍 Guidato</button><button class="bt" onclick="tv('sst4')">📖 Approfondimento</button></div>
+    <div id="ssg4" class="cg">
+      <div class="step">Valori critici: \(x=-4,\; x=1,\; x=2\)</div>
+      <div class="step">
+        <table class="ctbl" style="font-size:.82rem">
+          <tr><th></th><th>x&lt;-4</th><th>-4&lt;x&lt;1</th><th>1&lt;x&lt;2</th><th>x&gt;2</th></tr>
+          <tr><td>(x+4)</td><td>−</td><td>+</td><td>+</td><td>+</td></tr>
+          <tr><td>(x-1)</td><td>−</td><td>−</td><td>+</td><td>+</td></tr>
+          <tr><td>(2x-4)</td><td>−</td><td>−</td><td>−</td><td>+</td></tr>
+          <tr><td><strong>f</strong></td><td>−</td><td>+</td><td>−</td><td>+</td></tr>
+        </table>
+      </div>
+      <div class="step"><strong>f > 0 per \(-4&lt;x&lt;1\) e per \(x>2\)</strong></div>
+    </div>
+    <div id="sst4" class="ct">Il segno del risultato si ottiene moltiplicando i segni di ogni colonna: −×−×− = −, −×+×− = +, ecc.</div>
+  </div>
+</div>
+
+</div><!-- exgrid -->
+</div><!-- tab seg -->
+
+<div id="lim" class="tpanel">
+<div class="stitle">📡 Limiti &amp; Asintoti <span class="tag">STEP 5</span></div>
+<div class="mascot" style="margin:0 0 14px">
+  <div class="em">🚀</div>
+  <div class="bubble">Gli asintoti sono linee a cui la funzione si <strong>avvicina senza mai toccarle</strong>. Come una pizza kebab davanti a te quando sei a dieta: ti avvicini, la annusi... ma non puoi toccarla! 🍕</div>
+</div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 TEORIA: Limiti e Gerarchie degli Infiniti <span>▼</span></div>
+  <div class="tbody op">
+    <div class="rule"><div class="rt">📌 QUALI LIMITI FARE</div>
+      Conta le parentesi nella scrittura del dominio: quel numero è esattamente quanti limiti devi fare!
+    </div>
+    <div class="rule"><div class="rt">⚡ GERARCHIE DEGLI INFINITI</div>
+      <div class="fdisp">\[\text{logaritmi} \ll \text{potenze di }x \ll \text{esponenziali}\]</div>
+      In una somma, vince l'infinito con la gerarchia più alta.
+    </div>
+    <div class="rule"><div class="rt">🔍 ZERI CON SEGNO</div>
+      Quando sostituisci e ottieni \(\frac{N}{0}\), capire se è \(0^+\) o \(0^-\) determina se il limite è \(+\infty\) o \(-\infty\).
+    </div>
+  </div>
+</div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 TEORIA: I 3 Tipi di Asintoti <span>▼</span></div>
+  <div class="tbody op">
+    <div class="ccase" data-n="ASINTOTO VERTICALE"><br>
+      Si ha \(x=c\) asintoto verticale se:
+      <div class="fdisp">\[\lim_{x\to c}f(x)=\pm\infty\]</div>
+      Emerge dai limiti con x→numero che danno infinito.
+    </div>
+    <div class="ccase" data-n="ASINTOTO ORIZZONTALE"><br>
+      Si ha \(y=L\) asintoto orizzontale se:
+      <div class="fdisp">\[\lim_{x\to\pm\infty}f(x)=L\in\mathbb{R}\]</div>
+    </div>
+    <div class="ccase" data-n="ASINTOTO OBLIQUO — 3 STEP"><br>
+      <div class="rule"><div class="rt">Step 1</div>\(\lim_{x\to\pm\infty}f(x)=\pm\infty\) (deve dare ∞)</div>
+      <div class="rule" style="background:#e3f2fd;border-color:var(--blu)"><div class="rt" style="color:var(--blu)">Step 2 — m</div>\(m=\displaystyle\lim_{x\to\pm\infty}\frac{f(x)}{x}\) deve dare un numero \(m\neq 0\)</div>
+      <div class="rule" style="background:#e8f5e9;border-color:var(--grn)"><div class="rt" style="color:var(--grn)">Step 3 — q</div>\(q=\displaystyle\lim_{x\to\pm\infty}[f(x)-mx]\) deve dare un numero finito</div>
+      <div class="fdisp">Asintoto obliquo: \(y=mx+q\)</div>
+    </div>
+  </div>
+</div>
+
+<div class="stitle" style="font-size:1.3rem;margin-top:16px">💪 Esercizi</div>
+<div class="exgrid">
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 LIM.1</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Asintoti di \(f(x)=\dfrac{x}{x^2-3x}\) &nbsp;[Dom: \(\mathbb{R}\setminus\{0,3\}\)]</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gl1')">🔍 Guidato</button><button class="bt" onclick="tv('tl1')">📖 Approfondimento</button></div>
+    <div id="gl1" class="cg">
+      <div class="step"><strong>Semplifico:</strong> \(f(x)=\frac{x}{x(x-3)}=\frac{1}{x-3}\) per \(x\neq 0\)</div>
+      <div class="step"><strong>Limite in x=0:</strong> \(\frac{1}{0-3}=-\frac{1}{3}\) → finito → <span class="hr">nessun asintoto verticale in x=0</span> (c'è un buco)</div>
+      <div class="step"><strong>Limite in x=3:</strong> \(\frac{1}{0^-}=-\infty\) → <strong>asintoto verticale \(x=3\)</strong></div>
+      <div class="step"><strong>Asintoto orizzontale:</strong> \(\lim_{\pm\infty}\frac{1}{x-3}=0\) → \(y=0\)</div>
+    </div>
+    <div id="tl1" class="ct">Un limite finito in x=0 significa che c'è un <em>punto rimovibile</em> (buco) in x=0, non un asintoto. La funzione si avvicina a quel valore ma non ci arriva (0 è fuori dal dominio).</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 LIM.2</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Asintoti di \(f(x)=x^4-2x\) &nbsp;[Dom: \(\mathbb{R}\)]</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gl2')">🔍 Guidato</button><button class="bt" onclick="tv('tl2')">📖 Approfondimento</button></div>
+    <div id="gl2" class="cg">
+      <div class="step"><strong>Verticali:</strong> Dom = ℝ → nessuna condizione → nessun asintoto verticale</div>
+      <div class="step"><strong>Orizzontali:</strong> \(\lim_{\pm\infty}(x^4-2x)\): gerarchia → vince \(x^4\) → risultato \(+\infty\) → <span class="hr">nessun asintoto orizzontale</span></div>
+      <div class="step"><strong>Obliqui — Step 2:</strong> \(m=\lim_{\pm\infty}\frac{x^4-2x}{x}=\lim x^3-2=\pm\infty\) → m non finito → <span class="hr">nessun asintoto obliquo</span></div>
+      <div class="step"><strong>Risultato: nessun asintoto</strong></div>
+    </div>
+    <div id="tl2" class="ct">I polinomi di grado ≥ 2 non hanno mai asintoti obliqui perché m al passo 2 risulta ∞.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 LIM.3</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Asintoti di \(f(x)=\dfrac{e^x}{x+1}\) &nbsp;[Dom: \(\mathbb{R}\setminus\{-1\}\)]</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gl3')">🔍 Guidato</button><button class="bt" onclick="tv('tl3')">📖 Approfondimento</button></div>
+    <div id="gl3" class="cg">
+      <div class="step"><strong>Verticale:</strong> \(\lim_{x\to -1}\frac{e^x}{x+1}=\frac{e^{-1}}{0}=\pm\infty\) → asintoto verticale \(x=-1\)</div>
+      <div class="step"><strong>Orizzontali:</strong> \(\lim_{-\infty}\frac{e^x}{x+1}=\frac{0}{-\infty}=0\) → asintoto orizzontale \(y=0\) (solo per \(-\infty\))</div>
+      <div class="step">\(\lim_{+\infty}\frac{e^x}{x+1}\): gerarchia → esponenziale vince su potenza → \(+\infty\) → nessun asintoto per \(+\infty\)</div>
+      <div class="step"><strong>Obliqui per \(+\infty\)? Step 2:</strong> \(m=\lim_{+\infty}\frac{e^x}{x(x+1)}=+\infty\) → nessun asintoto obliquo</div>
+    </div>
+    <div id="tl3" class="ct">Una funzione può avere asintoti diversi per \(+\infty\) e per \(-\infty\)! Qui c'è asintoto orizzontale solo a sinistra.</div>
+  </div>
+</div>
+
+<div class="excard" style="grid-column:1/-1">
+  <div class="exhdr"><span class="exnum">📝 LIM.4 — ASINTOTO OBLIQUO</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Tutti gli asintoti di \(f(x)=\dfrac{2x^2-1}{x-3}\) &nbsp;[Dom: \(\mathbb{R}\setminus\{3\}\)]</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gl4')">🔍 Guidato</button><button class="bt" onclick="tv('tl4')">📖 Approfondimento</button></div>
+    <div id="gl4" class="cg">
+      <div class="step"><strong>Verticale:</strong> \(\lim_{x\to 3^-}\frac{17}{0^-}=-\infty\), \(\lim_{x\to 3^+}=+\infty\) → asintoto verticale \(x=3\)</div>
+      <div class="step"><strong>Orizzontali:</strong> \(\lim_{\pm\infty}\frac{2x^2}{x}=\lim 2x=\pm\infty\) → nessuno</div>
+      <div class="step"><strong>Obliquo — Step 2:</strong> \(m=\lim_{\pm\infty}\frac{2x^2-1}{x(x-3)}=\lim\frac{2x^2}{x^2}=2\)</div>
+      <div class="step"><strong>Obliquo — Step 3:</strong> \(q=\lim_{\pm\infty}\!\left(\frac{2x^2-1}{x-3}-2x\right)=\lim\frac{2x^2-1-2x(x-3)}{x-3}=\lim\frac{6x-1}{x-3}=6\)</div>
+      <div class="step"><strong>Asintoto obliquo:</strong> \(y=2x+6\)</div>
+    </div>
+    <div id="tl4" class="ct">Nel calcolo di q: metti tutto su un unico denominatore facendo l'MCM tra la frazione e \(-mx\). Poi usa le gerarchie degli infiniti.</div>
+  </div>
+</div>
+
+</div><!-- exgrid -->
+</div><!-- tab lim -->
+
+<div id="d1" class="tpanel">
+<div class="stitle">📈 Derivata Prima: Massimi &amp; Minimi <span class="tag">STEP 6</span></div>
+<div class="mascot" style="margin:0 0 14px">
+  <div class="em">🏔️</div>
+  <div class="bubble">I massimi sono le "cime delle montagne" del grafico, i minimi le "valli". Con la derivata prima li troviamo con esattezza matematica! 🗻</div>
+</div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 TEORIA: Studio della Derivata Prima <span>▼</span></div>
+  <div class="tbody op">
+    <div class="rule"><div class="rt">⚡ PROCEDIMENTO (5 PASSI)</div>
+      <p>1. Calcola \(f'(x)\)</p>
+      <p>2. Poni \(f'(x)\geq 0\) e risolvi</p>
+      <p>3. Costruisci il grafico dei segni di \(f'\)</p>
+      <p>4. Aggiungi frecce: ↑ dove \(f'>0\), ↓ dove \(f'&lt;0\)</p>
+      <p>5. Individua massimi e minimi</p>
+    </div>
+    <div class="fdisp">\[f'(x)>0\implies f\uparrow\text{(crescente)}\qquad f'(x)&lt;0\implies f\downarrow\text{(decrescente)}\]</div>
+    <table class="ctbl">
+      <tr><th>Situazione delle frecce</th><th>Tipo di punto</th></tr>
+      <tr><td>↑ poi ↓ (+ poi −)</td><td><strong>MASSIMO locale</strong></td></tr>
+      <tr><td>↓ poi ↑ (− poi +)</td><td><strong>MINIMO locale</strong></td></tr>
+    </table>
+    <div class="rule" style="margin-top:10px"><div class="rt">🔑 ASSOLUTI vs RELATIVI</div>
+      <p>• Se un limite dà \(+\infty\) → nessun massimo assoluto</p>
+      <p>• Se un limite dà \(-\infty\) → nessun minimo assoluto</p>
+      <p>• Per trovare la y: sostituisci la x del massimo/minimo nella <strong>funzione originale</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="stitle" style="font-size:1.3rem;margin-top:16px">💪 Esercizi</div>
+<div class="exgrid">
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 D1.1</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Monotonia e massimi/minimi di \(f(x)=x^4-2x^2-1\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gd1')">🔍 Guidato</button><button class="bt" onclick="tv('td1')">📖 Approfondimento</button></div>
+    <div id="gd1" class="cg">
+      <div class="step"><strong>\(f'(x)=4x^3-4x=4x(x^2-1)=4x(x-1)(x+1)\)</strong></div>
+      <div class="step">Valori critici: \(x=-1,\;0,\;1\)</div>
+      <div class="step">
+        Grafico dei segni di \(f'\):<br>
+        <table class="ctbl" style="font-size:.82rem">
+          <tr><th></th><th>x&lt;-1</th><th>-1</th><th>-1&lt;x&lt;0</th><th>0</th><th>0&lt;x&lt;1</th><th>1</th><th>x&gt;1</th></tr>
+          <tr><td>4x</td><td>−</td><td>−</td><td>−</td><td>0</td><td>+</td><td>+</td><td>+</td></tr>
+          <tr><td>(x-1)</td><td>−</td><td>−</td><td>−</td><td>−</td><td>−</td><td>0</td><td>+</td></tr>
+          <tr><td>(x+1)</td><td>−</td><td>0</td><td>+</td><td>+</td><td>+</td><td>+</td><td>+</td></tr>
+          <tr><td><strong>f'</strong></td><td>−</td><td>0</td><td>+</td><td>0</td><td>−</td><td>0</td><td>+</td></tr>
+          <tr><td></td><td>↓</td><td></td><td>↑</td><td></td><td>↓</td><td></td><td>↑</td></tr>
+        </table>
+      </div>
+      <div class="step">Min in \(x=-1\): \(f(-1)=1-2-1=-2\)<br>Max in \(x=0\): \(f(0)=-1\)<br>Min in \(x=1\): \(f(1)=-2\)</div>
+      <div class="step">Limiti → \(+\infty\) → nessun massimo assoluto. Minimi in ±1 sono assoluti.</div>
+    </div>
+    <div id="td1" class="ct">Il fattore 4 è sempre positivo → non cambia i segni. I valori y dei massimi/minimi si trovano sostituendo nella funzione <em>originale</em>, mai nella derivata!</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 D1.2</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Monotonia di \(f(x)=x^3-3x+2\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gd2')">🔍 Guidato</button><button class="bt" onclick="tv('td2')">📖 Approfondimento</button></div>
+    <div id="gd2" class="cg">
+      <div class="step">\(f'(x)=3x^2-3=3(x-1)(x+1)\)</div>
+      <div class="step">f' > 0 per \(x&lt;-1\) (↑) e \(x>1\) (↑); f' &lt; 0 per \(-1&lt;x&lt;1\) (↓)</div>
+      <div class="step"><strong>Max locale</strong> in \(x=-1\): \(y=f(-1)=-1+3+2=4\)</div>
+      <div class="step"><strong>Min locale</strong> in \(x=1\): \(y=f(1)=1-3+2=0\)</div>
+    </div>
+    <div id="td2" class="ct">Il polinomio di 3° grado tipicamente ha forma "a S": cresce, decresce, poi cresce di nuovo. I punti critici sono dove \(f'=0\).</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 D1.3</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Monotonia di \(f(x)=\dfrac{x}{x^2+1}\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gd3')">🔍 Guidato</button><button class="bt" onclick="tv('td3')">📖 Approfondimento</button></div>
+    <div id="gd3" class="cg">
+      <div class="step"><strong>Regola del quoziente:</strong> \(f'=\dfrac{(x^2+1)-x\cdot 2x}{(x^2+1)^2}=\dfrac{1-x^2}{(x^2+1)^2}\)</div>
+      <div class="step">Denominatore sempre > 0 → segno di \(f'\) = segno di \(1-x^2=(1-x)(1+x)\)</div>
+      <div class="step">\(f'>0\) per \(-1&lt;x&lt;1\) (↑); \(f'&lt;0\) altrove (↓)</div>
+      <div class="step"><strong>Max locale</strong> in \(x=1\): \(y=\frac{1}{2}\)</div>
+      <div class="step"><strong>Min locale</strong> in \(x=-1\): \(y=-\frac{1}{2}\)</div>
+    </div>
+    <div id="td3" class="ct">Il denominatore \((x^2+1)^2\) è sempre positivo → non influenza il segno. Solo il numeratore conta per determinare dove f cresce o decresce.</div>
+  </div>
+</div>
+
+</div><!-- exgrid -->
+</div><!-- tab d1 -->
+
+<div id="d2" class="tpanel">
+<div class="stitle">📉 Derivata Seconda: Flessi &amp; Concavità <span class="tag">STEP 7</span></div>
+<div class="mascot" style="margin:0 0 14px">
+  <div class="em">🔄</div>
+  <div class="bubble">La concavità dice se la curva "tiene l'acqua" (∪ concava su) o "la butta giù" (∩ concava giù). Dove cambia la concavità c'è un <strong>flesso</strong>!</div>
+</div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📚 TEORIA: Derivata Seconda e Flessi <span>▼</span></div>
+  <div class="tbody op">
+    <div class="rule"><div class="rt">⚡ PROCEDIMENTO</div>
+      <p>1. Calcola \(f''(x)\)</p>
+      <p>2. Poni \(f''(x)\geq 0\)</p>
+      <p>3. Costruisci il grafico dei segni</p>
+      <p>4. Aggiungi ∪ dove \(f''>0\), ∩ dove \(f''&lt;0\)</p>
+      <p>5. I <strong>flessi</strong> sono dove cambia la concavità</p>
+    </div>
+    <div class="fdisp">\[f''(x)>0\implies \cup \text{ (concava in su)}\qquad f''(x)&lt;0\implies \cap \text{ (concava in giù)}\]</div>
+    <div class="rule"><div class="rt">🔑 FLESSO ORDINARIO</div>
+      Pallino pieno nel grafico di \(f''\) (cioè \(f''=0\)) + cambio di concavità a sinistra e a destra = FLESSO
+    </div>
+    <div class="rule"><div class="rt">⚠️ FLESSO A TANGENTE VERTICALE</div>
+      Se il cambio di concavità avviene in un punto con pallino vuoto (\(f''\) non definita):<br>
+      1. Verifica che quel punto sia nel dominio di \(f\)<br>
+      2. Calcola \(\lim_{x\to x_0}f'(x)\): se dà \(\pm\infty\) → flesso a tangente verticale
+    </div>
+  </div>
+</div>
+
+<div class="stitle" style="font-size:1.3rem;margin-top:16px">💪 Esercizi</div>
+<div class="exgrid">
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 D2.1</span><span class="lv m">⭐⭐ medio</span></div>
+  <div class="exbody">
+    <div class="exf">Concavità e flessi di \(f(x)=x^3+2x^2-5\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gf1')">🔍 Guidato</button><button class="bt" onclick="tv('tf1')">📖 Approfondimento</button></div>
+    <div id="gf1" class="cg">
+      <div class="step">\(f'(x)=3x^2+4x\)</div>
+      <div class="step">\(f''(x)=6x+4\)</div>
+      <div class="step">\(f''\geq 0 \Rightarrow 6x+4\geq 0 \Rightarrow x\geq -\tfrac{2}{3}\)</div>
+      <div class="step">Cambio di concavità in \(x=-\tfrac{2}{3}\) con pallino pieno → <strong>FLESSO!</strong></div>
+      <div class="step">\(y_{\text{flesso}}=f\!\left(-\tfrac{2}{3}\right)=-\tfrac{8}{27}+\tfrac{8}{9}-5=-\tfrac{119}{27}\)</div>
+      <div class="step"><strong>Flesso in \(\left(-\tfrac{2}{3},\;-\tfrac{119}{27}\right)\)</strong></div>
+    </div>
+    <div id="tf1" class="ct">Nei polinomi di 3° grado c'è sempre esattamente un flesso (dove \(f''=0\)). A sinistra ∩, a destra ∪ (o viceversa).</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 D2.2</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Concavità di \(f(x)=\ln(x)+x^2\) &nbsp;[Dom: \(x>0\)]</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gf2')">🔍 Guidato</button><button class="bt" onclick="tv('tf2')">📖 Approfondimento</button></div>
+    <div id="gf2" class="cg">
+      <div class="step">\(f'(x)=\dfrac{1}{x}+2x=\dfrac{1+2x^2}{x}\)</div>
+      <div class="step">\(f''(x)=\dfrac{2x\cdot x-(1+2x^2)}{x^2}=\dfrac{-1}{x^2}&lt;0\) sempre per \(x>0\)</div>
+      <div class="step"><strong>f sempre concava in giù (∩) → nessun flesso!</strong></div>
+    </div>
+    <div id="tf2" class="ct">Se \(f''\) mantiene lo stesso segno su tutto il dominio, la concavità non cambia mai → nessun flesso. Non ci sono sempre flessi!</div>
+  </div>
+</div>
+
+<div class="excard" style="grid-column:1/-1">
+  <div class="exhdr"><span class="exnum">📝 D2.3 — FLESSO A TANGENTE VERTICALE</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Concavità e flessi di \(f(x)=\sqrt[3]{2x-1}=(2x-1)^{1/3}\) &nbsp;[Dom: \(\mathbb{R}\)]</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gf3')">🔍 Guidato</button><button class="bt" onclick="tv('tf3')">📖 Approfondimento</button></div>
+    <div id="gf3" class="cg">
+      <div class="step">\(f'(x)=\dfrac{1}{3}(2x-1)^{-2/3}\cdot 2=\dfrac{2}{3}(2x-1)^{-2/3}\)</div>
+      <div class="step">\(f''(x)=\dfrac{2}{3}\cdot\left(-\dfrac{2}{3}\right)(2x-1)^{-5/3}\cdot 2=\dfrac{-8}{9(2x-1)^{5/3}}\)</div>
+      <div class="step">Segno di \(f''\): numeratore −8 sempre negativo; denominatore \((2x-1)^{5/3}>0\) per \(x>\tfrac{1}{2}\)<br>
+        → \(f''&lt;0\) per \(x>\tfrac{1}{2}\) (∩) e \(f''>0\) per \(x&lt;\tfrac{1}{2}\) (∪)</div>
+      <div class="step">Cambio di concavità in \(x=\tfrac{1}{2}\): \(f''\) non definita → pallino vuoto<br>
+        \(x=\tfrac{1}{2}\) è nel dominio (Dom = ℝ) ✓<br>
+        \(\lim_{x\to 1/2}f'(x)=\lim\frac{2}{3}(2x-1)^{-2/3}=\frac{2}{3}\cdot\frac{1}{0^{2/3}}=+\infty\)</div>
+      <div class="step"><strong>→ FLESSO A TANGENTE VERTICALE in \(x=\tfrac{1}{2}\)</strong></div>
+      <div class="step">\(y=f\!\left(\tfrac{1}{2}\right)=\sqrt[3]{0}=0\) → Flesso in \(\left(\tfrac{1}{2},\,0\right)\)</div>
+    </div>
+    <div id="tf3" class="ct">Il flesso a tangente verticale è tipico delle radici cubiche. In quel punto il grafico "si drizza" verticalmente, poi riprende con la concavità ribaltata.</div>
+  </div>
+</div>
+
+</div><!-- exgrid -->
+</div><!-- tab d2 -->
+
+<div id="sc" class="tpanel">
+<div class="stitle">🏆 Studio di Funzione Completo <span class="tag">8 STEP</span></div>
+<div class="mascot" style="margin:0 0 14px">
+  <div class="em">🎮</div>
+  <div class="bubble">Questo è il boss finale! 😤 Lo studio completo è come finire Pokémon: devi fare tutte le palestre (i passaggi) prima della Lega Pokémon (il grafico). Ce la puoi fare! 🏆</div>
+</div>
+
+<div class="tbox">
+  <div class="thdr" onclick="tog(this)">📋 GLI 8 PASSAGGI — riepilogo <span>▼</span></div>
+  <div class="tbody op">
+    <table class="ctbl">
+      <tr><th>#</th><th>Passaggio</th><th>Cosa trovi</th></tr>
+      <tr><td><strong>1</strong></td><td>Dominio</td><td>Dove esiste la funzione</td></tr>
+      <tr><td><strong>2</strong></td><td>Simmetria (pari/dispari)</td><td>Tipo di simmetria del grafico</td></tr>
+      <tr><td><strong>3</strong></td><td>Zeri + intersezione asse y</td><td>Dove taglia gli assi</td></tr>
+      <tr><td><strong>4</strong></td><td>Studio del segno</td><td>Dove \(f>0\) e dove \(f&lt;0\)</td></tr>
+      <tr><td><strong>5</strong></td><td>Limiti e asintoti</td><td>Comportamento agli estremi</td></tr>
+      <tr><td><strong>6</strong></td><td>Derivata prima</td><td>Massimi, minimi, crescenza</td></tr>
+      <tr><td><strong>7</strong></td><td>Derivata seconda</td><td>Flessi, concavità</td></tr>
+      <tr><td><strong>8</strong></td><td>Grafico</td><td>Disegno finale</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="wex">
+  <div class="wex-t">🎯 Esempio Guidato Completo</div>
+  <p style="font-size:1.05rem;font-weight:700;margin-bottom:14px">Studia la funzione \(\displaystyle f(x)=\frac{x^2+3x-4}{2x-4}\)</p>
+
+  <div class="wstep"><div class="wsn">STEP 1 — DOMINIO</div><br>
+    Frazione → \(2x-4\neq 0 \Rightarrow x\neq 2\)<br>
+    <strong>Dom</strong> \(=(-\infty,2)\cup(2,+\infty)\)
+  </div>
+
+  <div class="wstep"><div class="wsn">STEP 2 — SIMMETRIA</div><br>
+    \(f(-x)=\dfrac{x^2-3x-4}{-2x-4}\) — diverso da \(f(x)\) e da \(-f(x)\) → <strong>né pari né dispari</strong>
+  </div>
+
+  <div class="wstep"><div class="wsn">STEP 3 — ZERI e ASSE y</div><br>
+    <em>Asse y:</em> \(f(0)=\dfrac{-4}{-4}=1\) → punto \((0,1)\)<br><br>
+    <em>Zeri:</em> \(x^2+3x-4=0 \Rightarrow (x-1)(x+4)=0 \Rightarrow x=1\) e \(x=-4\) (entrambi nel Dom ✓)
+  </div>
+
+  <div class="wstep"><div class="wsn">STEP 4 — STUDIO DEL SEGNO</div><br>
+    \(\dfrac{(x-1)(x+4)}{2(x-2)}\geq 0\) — valori critici: \(-4,\;1,\;2\)<br>
+    <table class="ctbl" style="font-size:.83rem;margin-top:8px">
+      <tr><th></th><th>\(x&lt;-4\)</th><th>\(-4&lt;x&lt;1\)</th><th>\(1&lt;x&lt;2\)</th><th>\(x&gt;2\)</th></tr>
+      <tr><td>\((x+4)\)</td><td>−</td><td>+</td><td>+</td><td>+</td></tr>
+      <tr><td>\((x-1)\)</td><td>−</td><td>−</td><td>+</td><td>+</td></tr>
+      <tr><td>\((x-2)\)</td><td>−</td><td>−</td><td>−</td><td>+</td></tr>
+      <tr><td><strong>f</strong></td><td>−</td><td>+</td><td>−</td><td>+</td></tr>
+    </table>
+    \(f>0\) per \(x\in(-4,1)\) e per \(x>2\)
+  </div>
+
+  <div class="wstep"><div class="wsn">STEP 5 — LIMITI e ASINTOTI</div><br>
+    \(\lim_{x\to-\infty}f=\lim\dfrac{x^2}{2x}=-\infty;\quad \lim_{x\to+\infty}f=+\infty\)<br>
+    \(\lim_{x\to 2^-}f=\dfrac{6}{0^-}=-\infty;\quad \lim_{x\to 2^+}f=+\infty\)<br><br>
+    <strong>Asintoto verticale:</strong> \(x=2\) &nbsp;|&nbsp; <strong>Nessun orizzontale</strong><br>
+    <strong>Obliquo:</strong> \(m=\lim\dfrac{f(x)}{x}=\dfrac{1}{2};\quad q=\lim[f(x)-\tfrac{x}{2}]=\dfrac{5}{2}\)<br>
+    <strong>Asintoto obliquo:</strong> \(y=\dfrac{x}{2}+\dfrac{5}{2}\)
+  </div>
+
+  <div class="wstep"><div class="wsn">STEP 6 — DERIVATA PRIMA</div><br>
+    \(f'(x)=\dfrac{2x^2-8x-4}{(2x-4)^2}\)<br><br>
+    Numeratore = 0: \(x=2\pm\sqrt{6}\)<br>
+    Denominatore sempre positivo → segno di \(f'\) = segno del numeratore<br><br>
+    \(f'&gt;0\) (↑) per \(x&lt;2-\sqrt{6}\) e per \(x&gt;2+\sqrt{6}\)<br>
+    <strong>Max locale</strong> in \(x=2-\sqrt{6}\approx -0.45\) &nbsp;|&nbsp; <strong>Min locale</strong> in \(x=2+\sqrt{6}\approx 4.45\)
+  </div>
+
+  <div class="wstep"><div class="wsn">STEP 7 — DERIVATA SECONDA</div><br>
+    \(f''(x)=\dfrac{6}{(x-2)^3}\)<br><br>
+    \(f''&lt;0\) per \(x&lt;2\) (∩) &nbsp;|&nbsp; \(f''>0\) per \(x&gt;2\) (∪)<br>
+    Il cambio di concavità è in \(x=2\) che non è nel dominio → <strong>nessun flesso</strong>
+  </div>
+
+  <div class="wstep"><div class="wsn">STEP 8 — GRAFICO (informazioni raccolte)</div><br>
+    <div style="background:#f5f5f5;border:2px dashed #aaa;border-radius:8px;padding:12px;font-size:.88rem;color:#555">
+      • Taglia asse x in \((-4,0)\) e \((1,0)\)<br>
+      • Taglia asse y in \((0,1)\)<br>
+      • Asintoto verticale \(x=2\)<br>
+      • Asintoto obliquo \(y=\tfrac{x}{2}+\tfrac{5}{2}\)<br>
+      • Max locale ≈ (−0.45, …), Min locale ≈ (4.45, …)<br>
+      • Concava ∩ per \(x&lt;2\), concava ∪ per \(x&gt;2\)
+    </div>
+  </div>
+</div>
+
+<div class="stitle" style="font-size:1.3rem;margin-top:16px">💪 Esercizi: Studio Completo</div>
+<div class="exgrid">
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SC.1</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Studio completo di \(f(x)=x^3-3x\)</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gsc1')">🔍 Guidato</button><button class="bt" onclick="tv('tsc1')">📖 Approfondimento</button></div>
+    <div id="gsc1" class="cg">
+      <div class="step"><strong>1. Dom:</strong> \(\mathbb{R}\)</div>
+      <div class="step"><strong>2. Simmetria:</strong> \(f(-x)=-(x^3-3x)=-f(x)\) → <strong>DISPARI</strong></div>
+      <div class="step"><strong>3. Zeri:</strong> \(x(x^2-3)=0\) → \(x=0,\pm\sqrt{3}\); asse y: \(f(0)=0\)</div>
+      <div class="step"><strong>4. Segno:</strong> \(f&gt;0\) per \(-\sqrt{3}&lt;x&lt;0\) o \(x&gt;\sqrt{3}\)</div>
+      <div class="step"><strong>5. Limiti:</strong> \(\pm\infty\) → nessun asintoto</div>
+      <div class="step"><strong>6. f':</strong> \(3(x-1)(x+1)\) → Max \((-1,2)\); Min \((1,-2)\)</div>
+      <div class="step"><strong>7. f'':</strong> \(6x\) → flesso in \((0,0)\)</div>
+    </div>
+    <div id="tsc1" class="ct">La simmetria dispari è utilissima: basta disegnare la metà destra e poi ribaltare 180° rispetto all'origine per ottenere la metà sinistra.</div>
+  </div>
+</div>
+
+<div class="excard">
+  <div class="exhdr"><span class="exnum">📝 SC.2</span><span class="lv h">⭐⭐⭐ difficile</span></div>
+  <div class="exbody">
+    <div class="exf">Studio completo di \(f(x)=\dfrac{x}{x-1}\) &nbsp;[Dom: \(\mathbb{R}\setminus\{1\}\)]</div>
+    <div class="exbtns"><button class="bg" onclick="tv('gsc2')">🔍 Guidato</button><button class="bt" onclick="tv('tsc2')">📖 Approfondimento</button></div>
+    <div id="gsc2" class="cg">
+      <div class="step"><strong>2. Simmetria:</strong> né pari né dispari</div>
+      <div class="step"><strong>3. Zeri:</strong> \(x=0\); asse y: \(f(0)=0\)</div>
+      <div class="step"><strong>4. Segno:</strong> \(f&gt;0\) per \(x&lt;0\) o \(x&gt;1\)</div>
+      <div class="step"><strong>5. Asintoti:</strong> verticale \(x=1\); orizzontale \(y=1\) (\(\lim_{\pm\infty}f=1\))</div>
+      <div class="step"><strong>6. f':</strong> \(f'=\frac{(x-1)-x}{(x-1)^2}=\frac{-1}{(x-1)^2}&lt;0\) sempre → <strong>sempre decrescente!</strong> nessun massimo/minimo</div>
+      <div class="step"><strong>7. f'':</strong> \(f''=\frac{2}{(x-1)^3}\) → ∩ per \(x&lt;1\), ∪ per \(x&gt;1\); nessun flesso (x=1 fuori Dom)</div>
+    </div>
+    <div id="tsc2" class="ct">Questa è un'iperbole con asintoti \(x=1\) e \(y=1\). Il fatto che \(f'&lt;0\) sempre significa che è sempre decrescente su entrambi i rami.</div>
+  </div>
+</div>
+
+</div><!-- exgrid -->
+</div><!-- tab sc -->
+
+<script>
+function showTab(id, btn) {
+  // Rimuove la classe 'act' da tutti i pannelli e i bottoni
+  document.querySelectorAll('.tpanel').forEach(t => t.classList.remove('act'));
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('act'));
+  
+  // Attiva il pannello e il bottone selezionati
+  const panel = document.getElementById(id);
+  if (panel) {
+    panel.classList.add('act');
+    btn.classList.add('act');
+  }
+  
+  // Torna in alto con effetto fluido
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  
+  // Forza il rendering delle formule MathJax nel nuovo pannello
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([panel]).catch((err) => console.log(err.message));
+  }
+}
+
+function tv(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('op');
+  
+  // Formatta le formule se il riquadro viene aperto
+  if (el.classList.contains('op') && window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([el]).catch((err) => console.log(err.message));
+  }
+}
+
+function tog(hdr) {
+  const body = hdr.nextElementSibling;
+  const arrow = hdr.querySelector('span');
+  if (!body || !arrow) return;
+  
+  body.classList.toggle('op');
+  arrow.textContent = body.classList.contains('op') ? '▲' : '▼';
+  
+  // Formatta le formule nella sezione teoria appena aperta
+  if (body.classList.contains('op') && window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([body]).catch((err) => console.log(err.message));
+  }
+}
+</script>
+</body>
+</html>
